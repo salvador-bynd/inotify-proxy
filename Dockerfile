@@ -9,4 +9,4 @@ RUN apt-get update && apt-get install -qy \
 WORKDIR /app
 ADD . /app
 
-CMD ["tail", "-f", "Dockerfile"]
+CMD ["make"]
