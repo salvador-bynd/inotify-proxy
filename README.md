@@ -1,4 +1,4 @@
-# Changewatcher
+# inotify-proxy
 
 A utility to help with development within Docker containers on OSX.
 
@@ -10,11 +10,11 @@ https://www.virtualbox.org/ticket/14234
 
 Workflows that rely on inotify events to trigger build processes are limited by this issue.
 
-Changewatcher is a small utility to restore these build processes. It polls for filechanges, then touches those files again _inside_ the container, triggering the necessary inotify events.
+inotify-proxy is a small utility to restore these build processes. It polls for filechanges, then touches those files again _inside_ the container, triggering the necessary inotify events.
 
 ## Usage
 
-Changewatcher must be run inside a container. It will monitor all files and descendents of the directory it is run from.
+inotify-proxy must be run inside a container. It will monitor all files and descendents of the directory it is run from.
 
 Given the following directory structure within a container named myapp_web_1
 
@@ -26,16 +26,16 @@ app
       libs
         jquery.js
 bin
-  changewatcher
+  inotify-proxy
 ```
 Changes within the javascript folder (including within the libs folder) can be monitored with:
 
 ```
 $ docker exec -ti myapp_web_1 /bin/bash
 $$ cd app/assets/javascript
-$$ ../../../bin/changewatcher
+$$ ../../../bin/inotify-proxy
 ```
 
-Once running, changewatcher will initially list all of the files it is monitoring. When one of those files changes the name of the changed file will be displayed. Any build processes running in that container and listening for changes on that file will be triggered.
+Once running, inotify-proxy will initially list all of the files it is monitoring. When one of those files changes the name of the changed file will be displayed. Any build processes running in that container and listening for changes on that file will be triggered.
 
 To reduce the overhead of polling for changes, polling is only run once per second.

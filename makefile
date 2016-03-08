@@ -1,10 +1,10 @@
-all: bin bin/changewatcher
+all: bin bin/inotify-proxy
 
 bin:
 	mkdir bin
 
-bin/changewatcher:
-	g++ -Wall -std=c++11 src/changewatcher.cpp -o bin/changewatcher
+bin/inotify-proxy:
+	g++ -Wall -std=c++11 src/inotify-proxy.cpp -o bin/inotify-proxy
 
 .PHONY: clean
 
