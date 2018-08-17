@@ -2,9 +2,9 @@
 
 A utility to help with development within Docker containers on OSX.
 
-Containers run on OSX through docker-machine or boot2docker are running within a VirtualBox virtual machine. Files can be shared between OSX and the container through shared volumes. This allows the developer to continue to use their editor of choice while building and running their code inside the container.
+Containers run on OSX through docker-machine or boot2docker are running within a virtual machine. Files can be shared between OSX and the container through shared volumes or NFS. This allows the developer to continue to use their editor of choice while building and running their code inside the container.
 
-Unfortunately, Virtual Box does not trigger inotify events within the container when a file is modified on the OSX host. This issue is described here:
+Unfortunately, Virtual Box/Parallels does not trigger inotify events within the container when a file is modified on the OSX host. This issue is described here:
 https://www.virtualbox.org/ticket/10660
 https://www.virtualbox.org/ticket/14234
 
@@ -14,26 +14,20 @@ inotify-proxy is a small utility to restore these build processes. It polls for 
 
 ## Usage
 
-inotify-proxy must be run inside a container. It will monitor all files and descendents of the directory it is run from.
-
-Given the following directory structure within a container named myapp_web_1
+You can build this image and use it beside you other containers to create file change events when adding it in this way:
 
 ```
-app
-  assets
-    javascript
-      index.js
-      libs
-        jquery.js
-bin
-  inotify-proxy
-```
-Changes within the javascript folder (including within the libs folder) can be monitored with:
+my_service:
+  image: my_service
+  volumes:
+   - ./ui:/app
+  ports:
+    - "80:80"
 
-```
-$ docker exec -ti myapp_web_1 /bin/bash
-$$ cd app/assets/javascript
-$$ ../../../bin/inotify-proxy
+inotify-proxy:
+  build: https://github.com/thomet/inotify-proxy.git
+  volumes:
+   - ./ui/src:/app
 ```
 
 Once running, inotify-proxy will initially list all of the files it is monitoring. When one of those files changes the name of the changed file will be displayed. Any build processes running in that container and listening for changes on that file will be triggered.

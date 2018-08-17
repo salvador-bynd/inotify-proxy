@@ -1,12 +1,14 @@
-FROM debian:jessie
+FROM alpine
 
-MAINTAINER Peter Hastie <phastie@bleacherreport.com>
+MAINTAINER Thomas Metzmacher <thomas@metzmacher.me>
 
-RUN apt-get update && apt-get install -qy \
-  build-essential \
-  vim
+RUN apk add --update g++
+
+RUN mkdir /app
 
 WORKDIR /app
 ADD . /app
 
-CMD ["make"]
+RUN g++ -Wall -std=c++11 src/inotify-proxy.cpp -o /usr/bin/inotify-proxy
+
+CMD ["inotify-proxy"]
