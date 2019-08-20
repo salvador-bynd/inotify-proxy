@@ -1,10 +1,12 @@
-FROM alpine
+FROM ubuntu:14.04
 
-MAINTAINER Thomas Metzmacher <thomas@metzmacher.me>
+MAINTAINER Peter Hastie <phastie@bleacherreport.com>
 
-RUN apk add --update g++
+RUN cp /etc/apt/sources.list /etc/apt/sources.list.bk
+RUN sed -i 's%archive.ubuntu.com%mirrors.aliyun.com/ubuntu/%' /etc/apt/sources.list
 
-RUN mkdir /app
+RUN apt-get update && apt-get install -qy \
+  build-essential
 
 WORKDIR /app
 ADD . /app
