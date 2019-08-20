@@ -1,6 +1,6 @@
 # inotify-proxy
 
-A utility to help with development within Docker containers on OSX.
+A utility to help with development within Docker containers on OSX and WIN.
 
 Containers run on OSX through docker-machine or boot2docker are running within a virtual machine. Files can be shared between OSX and the container through shared volumes or NFS. This allows the developer to continue to use their editor of choice while building and running their code inside the container.
 
@@ -25,7 +25,7 @@ my_service:
     - "80:80"
 
 inotify-proxy:
-  build: https://github.com/thomet/inotify-proxy.git
+  build: https://github.com/lvyuanjiao/inotify-proxy.git
   volumes:
    - ./ui/src:/app
 ```
